@@ -1,4 +1,5 @@
 import { createGlobalStyle } from "styled-components";
+import Navbar from "../components/Navbar";
 import CreateNewJob from "./CreateNewJob";
 
 const GlobalStyle = createGlobalStyle`
@@ -13,6 +14,7 @@ function App() {
   return (
     <>
       <GlobalStyle />
+      <Navbar />
       <CreateNewJob />
     </>
   );
