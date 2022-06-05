@@ -3,6 +3,7 @@ import { Container } from "@mui/system";
 import styled from "styled-components";
 import { ClickAwayListener } from "@mui/material";
 import { useMemo } from "react";
+import device from "../responsive/device";
 
 const JobNameTextField = styled.input.attrs({
   type: "text",
@@ -14,6 +15,11 @@ const JobNameTextField = styled.input.attrs({
   display: inline-block;
   width: 100%;
   color: #5b5858;
+
+  @media ${device.mobileL} {
+    padding: 10px;
+    font-size: 10px;
+  }
 `;
 
 const FormContainer = styled.div`
@@ -21,6 +27,11 @@ const FormContainer = styled.div`
   color: #5b5858;
   display: flex;
   column-gap: 10px;
+  @media ${device.mobileL} {
+    & label {
+      font-size: 10px;
+    }
+  }
 `;
 
 const PrioritySelect = styled.div`
@@ -32,13 +43,24 @@ const PrioritySelect = styled.div`
   &:hover {
     cursor: pointer;
   }
+
+  @media ${device.mobileL} {
+    padding: 10px 0 10px 10px;
+    font-size: 10px;
+  }
 `;
 
-const CustomSelect = styled.div`
+const CustomOptionContainer = styled.div`
   padding: 5px;
   border: 1px solid #ccc;
   margin-top: 3px;
   border-radius: 5px;
+
+  @media ${device.mobileL} {
+    font-size: 10px;
+    padding: 3px;
+    margin-bottom: 3px;
+  }
 `;
 
 const CustomOption = styled.div`
@@ -59,6 +81,12 @@ const CustomOption = styled.div`
     cursor: pointer;
     filter: brightness(85%);
   }
+
+  @media ${device.mobileL} {
+    font-size: 10px;
+    padding: 3px;
+    margin-bottom: 3px;
+  }
 `;
 
 const CreateButton = styled.button`
@@ -68,6 +96,8 @@ const CreateButton = styled.button`
   margin-top: 18px;
   padding: 14px;
   border-radius: 5px;
+  display: flex;
+  align-items: center;
   &:hover {
     cursor: pointer;
     filter: brightness(85%);
@@ -75,6 +105,11 @@ const CreateButton = styled.button`
   & > img {
     height: 12px;
     width: 17px;
+  }
+
+  @media ${device.mobileL} {
+    font-size: 10px;
+    padding: 11px;
   }
 `;
 
@@ -125,18 +160,18 @@ function CreateNewJob() {
     <Container sx={{ padding: "50px 10px" }}>
       <h2>Create New Job</h2>
       <FormContainer>
-        <div style={{ flexGrow: "4" }}>
+        <div style={{ width: "50%" }}>
           <label>Job Name</label>
           <JobNameTextField value={jobName} onChange={NameChangeHandler} />
         </div>
-        <div style={{ flexGrow: "2" }}>
+        <div style={{ width: "30%" }}>
           <label>Job Priority</label>
           <PrioritySelect onClick={toggleSelect}>
             {selectedPriority.name}
           </PrioritySelect>
           {isOpenSelectPriority && (
             <ClickAwayListener onClickAway={() => toggleSelect(false)}>
-              <CustomSelect>
+              <CustomOptionContainer>
                 {priorities.map(({ name, value }) => (
                   <CustomOption
                     key={value}
@@ -146,11 +181,11 @@ function CreateNewJob() {
                     {name}
                   </CustomOption>
                 ))}
-              </CustomSelect>
+              </CustomOptionContainer>
             </ClickAwayListener>
           )}
         </div>
-        <div>
+        <div style={{ width: "20%" }}>
           <CreateButton>
             <img src="/assets/add.png" alt="add_icon" /> Create
           </CreateButton>
