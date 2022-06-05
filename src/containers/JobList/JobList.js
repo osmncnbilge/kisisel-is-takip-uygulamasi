@@ -128,7 +128,7 @@ function JobList() {
       <div style={{ display: "flex", justifyContent: "center" }}>
         <h2>Job List</h2>
         <p style={{ marginLeft: "auto", alignSelf: "flex-end" }}>
-          (3/{jobList.length})
+          ({sortedJobList.length}/{jobList.length})
         </p>
       </div>
       <FilterFormContainer>
