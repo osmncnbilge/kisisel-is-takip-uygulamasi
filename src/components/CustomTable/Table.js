@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import styled, { css } from "styled-components";
 import device from "../../responsive/device";
+import CustomModal from "../CustomModal/CustomModal";
 
 const CustomTable = styled.table`
   display: block;
@@ -92,7 +93,7 @@ const PriorityText = styled.p`
 
 const IconButton = styled.button`
   border: none;
-  background-color: #ddd;
+  background-color: #dddddd8a;
   padding: 10px;
   border-radius: 5px;
   &:hover {
@@ -114,6 +115,9 @@ const IconButton = styled.button`
 `;
 
 function Table({ jobList }) {
+  const [selectedEditJob, setSelectedEditJob] = useState(null);
+  const [selectedDeleteJob, setSelectedDeleteJob] = useState(null);
+
   return (
     <>
       <CustomTable>
@@ -125,19 +129,19 @@ function Table({ jobList }) {
           </CustomTr>
         </CustomThead>
         <CustomTbody>
-          {jobList?.map(({ id, name, priority }) => (
-            <CustomTr key={id}>
-              <CustomTd>{name}</CustomTd>
+          {jobList?.map((job) => (
+            <CustomTr key={job.id}>
+              <CustomTd>{job.name}</CustomTd>
               <CustomTd>
-                <PriorityText value={priority.value}>
-                  {priority.name}
+                <PriorityText value={job?.priority?.value}>
+                  {job?.priority?.name}
                 </PriorityText>
               </CustomTd>
               <CustomTd isIconColumn={true}>
-                <IconButton>
+                <IconButton onClick={() => setSelectedEditJob(job)}>
                   <img src="/assets/edit.png" alt="edit_icon" />
                 </IconButton>
-                <IconButton>
+                <IconButton onClick={() => setSelectedDeleteJob(job)}>
                   <img src="/assets/delete.png" alt="delet_icon" />
                 </IconButton>
               </CustomTd>
@@ -145,6 +149,20 @@ function Table({ jobList }) {
           ))}
         </CustomTbody>
       </CustomTable>
+      {selectedEditJob && (
+        <CustomModal
+          selectedJob={selectedEditJob}
+          clearSelectedJob={setSelectedEditJob}
+        />
+      )}
+
+      {selectedDeleteJob && (
+        <CustomModal
+          isDelete={true}
+          selectedJob={selectedDeleteJob}
+          clearSelectedJob={setSelectedDeleteJob}
+        />
+      )}
     </>
   );
 }

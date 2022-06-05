@@ -3,7 +3,7 @@ import styled from "styled-components";
 import CustomSelect from "../../components/CustomSelect/CustomSelect";
 import CustomTable from "../../components/CustomTable/Table";
 import device from "../../responsive/device";
-import { v4 as uuidv4 } from "uuid";
+import { useSelector } from "react-redux";
 
 const FilterFormContainer = styled.div`
   display: flex;
@@ -60,6 +60,8 @@ function JobList() {
     value: 0,
   });
 
+  const jobList = useSelector((state) => state.jobReducer);
+
   const priorities = useMemo(
     () => [
       {
@@ -78,33 +80,13 @@ function JobList() {
     []
   );
 
-  const jobList = useMemo(
-    () => [
-      {
-        id: uuidv4(),
-        name: "Osman Can BİLGE",
-        priority: {
-          name: "Urgent",
-          value: 1,
-        },
-      },
-      {
-        id: uuidv4(),
-        name: "Oğuzhan BİLGE",
-        priority: {
-          name: "Regular",
-          value: 2,
-        },
-      },
-    ],
-    []
-  );
-
   return (
     <div style={{ marginTop: "100px" }}>
       <div style={{ display: "flex", justifyContent: "center" }}>
         <h2>Job List</h2>
-        <p style={{ marginLeft: "auto", alignSelf: "flex-end" }}>(3/3)</p>
+        <p style={{ marginLeft: "auto", alignSelf: "flex-end" }}>
+          (3/{jobList.length})
+        </p>
       </div>
       <FilterFormContainer>
         <SearchTextFieldContainer>

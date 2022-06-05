@@ -2,23 +2,11 @@ import React, { useMemo, useState } from "react";
 import styled from "styled-components";
 import device from "../../responsive/device";
 import CustomSelect from "../../components/CustomSelect/CustomSelect";
-
-const JobNameTextField = styled.input.attrs({
-  type: "text",
-})`
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  outline: 0;
-  padding: 12px 20px;
-  display: inline-block;
-  width: 100%;
-  color: #5b5858;
-
-  @media ${device.mobileL} {
-    padding: 10px;
-    font-size: 10px;
-  }
-`;
+import { ToastContainer, toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { createJob } from "../../store/actions/jobActions";
+import { v4 as uuidv4 } from "uuid";
+import CustomTextField from "../../components/CustomTextField/CustomTextField";
 
 const FormContainer = styled.div`
   margin-top: 20px;
@@ -58,6 +46,7 @@ const CreateButton = styled.button`
 `;
 
 function CreateNewJob() {
+  const dispatch = useDispatch();
   const [jobName, setJobName] = useState("");
   const [selectedPriority, setSelectedPriotiy] = useState({
     name: "Choose",
@@ -86,14 +75,50 @@ function CreateNewJob() {
     setJobName(event.target.value);
   };
 
+  const createButtonClickHandler = () => {
+    if (jobName === "" || selectedPriority.value === 0) {
+      toast.error("Job Name and Priority fields are required!", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } else {
+      const job = {
+        id: uuidv4(),
+        name: jobName,
+        priority: selectedPriority,
+      };
+
+      dispatch(createJob(job));
+      setSelectedPriotiy({ name: "Choose", value: 0 });
+      setJobName("");
+      toast.success("Job is created!", {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  };
+
   return (
     <>
+      <ToastContainer />
       <h2>Create New Job</h2>
       <FormContainer>
-        <div style={{ flexGrow: 2 }}>
-          <label>Job Name</label>
-          <JobNameTextField value={jobName} onChange={NameChangeHandler} />
-        </div>
+        <CustomTextField
+          label={"Job Name"}
+          containerStyle={{ flexGrow: 2 }}
+          value={jobName}
+          onChange={NameChangeHandler}
+        />
         <CustomSelect
           label={"Job Priority"}
           priorities={priorities}
@@ -102,7 +127,7 @@ function CreateNewJob() {
           containerStyle={{ flexGrow: 1 }}
         />
         <div>
-          <CreateButton>
+          <CreateButton onClick={createButtonClickHandler}>
             <img src="/assets/add.png" alt="add_icon" /> Create
           </CreateButton>
         </div>
