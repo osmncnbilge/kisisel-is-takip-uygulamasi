@@ -87,7 +87,7 @@ function CustomSelect({
     <div style={{ position: "relative", ...containerStyle }}>
       {label && <label>{label}</label>}
       <PrioritySelect onClick={toggleSelect}>
-        {selectedPriority.name}
+        {selectedPriority?.name}
       </PrioritySelect>
       {isOpenSelectPriority && (
         <ClickAwayListener onClickAway={() => toggleSelect(false)}>
