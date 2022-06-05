@@ -18,7 +18,7 @@ function Navbar() {
   return (
     <NavbarContainer>
       <Container>
-        <img src="/assets/logo.png" alt="logo" />
+        <LogoImg src="/assets/logo.png" alt="logo" />
       </Container>
     </NavbarContainer>
   );
