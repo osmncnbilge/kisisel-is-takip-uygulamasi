@@ -47,7 +47,7 @@ const CustomOption = styled.div`
       ? props.theme.regularColor
       : props.value === 3
       ? props.theme.trivalColor
-      : "none"};
+      : "#ddd"};
   color: #fff;
   margin-bottom: 3px;
   &:hover {

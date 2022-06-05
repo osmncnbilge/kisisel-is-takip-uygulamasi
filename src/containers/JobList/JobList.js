@@ -60,10 +60,49 @@ function JobList() {
     value: 0,
   });
 
+  const [filterText, setFilterText] = useState("");
+
   const jobList = useSelector((state) => state.jobReducer);
+
+  const filteredJobList = useMemo(() => {
+    const filteredByName = jobList.filter((job) =>
+      job.name.includes(filterText)
+    );
+    const filteredByPriority = filteredByName.filter((job) => {
+      if (selectedPriority.value === 0) {
+        return job;
+      } else {
+        return job.priority.value === selectedPriority.value;
+      }
+    });
+
+    return filteredByPriority;
+  }, [jobList, filterText, selectedPriority]);
+
+  const sortedJobList = useMemo(() => {
+    const sortedByName = filteredJobList.sort((job1, job2) => {
+      const job1Name = job1.name;
+      const job2Name = job2.name;
+      if (job1Name < job2Name) {
+        return -1;
+      }
+      if (job1Name > job2Name) {
+        return 1;
+      }
+    });
+    const sortedByPriorityValue = sortedByName.sort(
+      (job1, job2) => job1.priority.value - job2.priority.value
+    );
+
+    return sortedByPriorityValue;
+  }, [filteredJobList]);
 
   const priorities = useMemo(
     () => [
+      {
+        name: "Priority(all)",
+        value: 0,
+      },
       {
         name: "Urgent",
         value: 1,
@@ -80,6 +119,10 @@ function JobList() {
     []
   );
 
+  const filterTextOnChangeHandler = (event) => {
+    setFilterText(event.target.value);
+  };
+
   return (
     <div style={{ marginTop: "100px" }}>
       <div style={{ display: "flex", justifyContent: "center" }}>
@@ -90,7 +133,11 @@ function JobList() {
       </div>
       <FilterFormContainer>
         <SearchTextFieldContainer>
-          <SearchTextField placeholder="Job Name" />
+          <SearchTextField
+            placeholder="Job Name"
+            value={filterText}
+            onChange={filterTextOnChangeHandler}
+          />
           <img src="/assets/search.png" alt="search" />
         </SearchTextFieldContainer>
         <CustomSelect
@@ -100,7 +147,7 @@ function JobList() {
           containerStyle={{ flexBasis: "20%" }}
         />
       </FilterFormContainer>
-      <CustomTable jobList={jobList} />
+      <CustomTable jobList={sortedJobList} />
     </div>
   );
 }
