@@ -1,6 +1,9 @@
 import { createGlobalStyle } from "styled-components";
-import Navbar from "../components/Navbar";
-import CreateNewJob from "./CreateNewJob";
+import Navbar from "../components/Navbar/Navbar";
+import CreateNewJob from "./CreateNewJob/CreateNewJob";
+import JobList from "./JobList/JobList";
+import { Container } from "@mui/system";
+import { ThemeProvider } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -10,12 +13,23 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
+const theme = {
+  urgentColor: "#f23577",
+  regularColor: "#f29d35",
+  trivalColor: "#2e85ff",
+};
+
 function App() {
   return (
     <>
       <GlobalStyle />
-      <Navbar />
-      <CreateNewJob />
+      <ThemeProvider theme={theme}>
+        <Navbar />
+        <Container sx={{ padding: "50px 10px" }}>
+          <CreateNewJob />
+          <JobList />
+        </Container>
+      </ThemeProvider>
     </>
   );
 }
